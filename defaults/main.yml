@@ -1,0 +1,4 @@
+---
+# defaults file for netzwirt.mysql-server
+
+mysql_server_package: mysql-server-5.5

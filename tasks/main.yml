@@ -1,0 +1,40 @@
+---
+# tasks file for netzwirt.mysql-server
+
+- name: install helper packages
+  apt: 
+    name={{item}}
+    state=present
+  with_items:
+    - debconf-utils
+    - pwgen
+
+
+- name: generate root password for mysql
+  shell: pwgen -s 32 1
+    executable=/bin/bash
+    creates=/root/.my.cnf
+  register: mysql_password
+  
+
+- name: generate client config
+  template: 
+    src=my.cnf.j2
+    dest=/root/.my.cnf
+    owner=root 
+    group=root
+    mode=0400
+  when: mysql_password.changed
+
+
+- name: preseed password
+  shell: echo "{{mysql_server_package}} mysql-server/root_password password {{mysql_password.stdout}}" | debconf-set-selections ;
+         echo "{{mysql_server_package}} mysql-server/root_password_again password {{mysql_password.stdout}}" | debconf-set-selections
+    executable=/bin/bash
+  when: mysql_password.changed
+
+
+- name: install mysql-server
+  apt: 
+    name={{mysql_server_package}} 
+    state=present
