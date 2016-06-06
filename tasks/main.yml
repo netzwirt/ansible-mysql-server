@@ -3,8 +3,8 @@
 
 - name: install helper packages
   apt: 
-    name={{item}}
-    state=present
+    name: "{{ item }}"
+    state: present
   with_items:
     - debconf-utils
     - pwgen
@@ -19,22 +19,27 @@
 
 - name: generate client config
   template: 
-    src=my.cnf.j2
-    dest=/root/.my.cnf
-    owner=root 
-    group=root
-    mode=0400
+    src: my.cnf.j2
+    dest: /root/.my.cnf
+    owner: root 
+    group: root
+    mode: 0400
   when: mysql_password.changed
 
 
 - name: preseed password
-  shell: echo "{{mysql_server_package}} mysql-server/root_password password {{mysql_password.stdout}}" | debconf-set-selections ;
-         echo "{{mysql_server_package}} mysql-server/root_password_again password {{mysql_password.stdout}}" | debconf-set-selections
-    executable=/bin/bash
+  debconf: 
+    name: "{{ mysql_server_package }}" 
+    question: "{{ item }}"
+    vtype: password 
+    value: "{{ mysql_password.stdout }}"
+  with_items:
+  - mysql-server/root_password
+  - mysql-server/root_password_again
   when: mysql_password.changed
 
 
 - name: install mysql-server
   apt: 
-    name={{mysql_server_package}} 
-    state=present
+    name: "{{mysql_server_package}}"
+    state: present
