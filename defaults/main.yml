@@ -2,3 +2,13 @@
 # defaults file for netzwirt.mysql-server
 
 mysql_server_package: mysql-server-5.5
+
+# listen
+mysql_server_bind_address: 127.0.0.1
+
+# encoding
+mysql_server_character_set: 'utf8'
+mysql_server_collation: 'utf8_general_ci'
+
+# set sql mode
+mysql_server_sql_mode: 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION'

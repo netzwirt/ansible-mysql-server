@@ -1,0 +1,11 @@
+# {{ ansible_managed }}
+
+
+[client]
+default-character-set = {{ mysql_server_character_set }}
+
+[mysqld]
+character-set-server   = {{ mysql_server_character_set }}
+collation-server       = {{ mysql_server_collation }}
+character_set_server   = {{ mysql_server_character_set }}
+collation_server       = {{ mysql_server_collation }}
