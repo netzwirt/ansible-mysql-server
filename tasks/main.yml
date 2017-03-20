@@ -26,7 +26,7 @@
   when: _use_mariadb
 
 
-- name: add add mariadb apt repository
+- name: add mariadb apt repository
   apt_repository: 
     repo: "deb http://ftp.heanet.ie/mirrors/mariadb/repo/{{ _use_mariadb_version }}/{{ ansible_distribution|lower }} {{ ansible_distribution_release }} main" 
     state: present 
