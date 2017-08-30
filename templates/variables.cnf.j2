@@ -1,0 +1,8 @@
+#
+# {{ ansible_managed }}
+#
+
+[mysqld]
+{% for conf in mysql_server_variables %}
+{{ conf }}
+{% endfor %}
