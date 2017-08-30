@@ -15,8 +15,10 @@
 - name: add mariadb repository key
   apt_key: 
     keyserver: keyserver.ubuntu.com 
-    id: "0xcbcb082a1bb943db"
-    id: "0xF1656F24C74CD1D8"
+    id: "{{ item }}"
+  with_items: 
+  - "0xcbcb082a1bb943db"
+  - "0xF1656F24C74CD1D8"
   when: _use_mariadb
 
 
@@ -84,6 +86,13 @@
     state: present
 
 
+- name: install python-mysqldb
+  apt: 
+    name: python-mysqldb
+    state: present
+  when: mysql_server_python_module
+
+
 - name: configure server
   template: 
     src: "{{ item }}.cnf.j2"
@@ -92,6 +101,7 @@
   - 'bind-address'
   - 'charset'
   - 'sql-mode'
+  - 'variables'
   notify:
   - restart mysql
   
